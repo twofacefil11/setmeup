@@ -2,8 +2,12 @@
 
 #util
 start_dir=$(pwd)
+
+#formatting
 tw=$(tput cols)
 spacer="        "
+bold=$(tput bold)
+norm=$(tput sgr0)
 
 #paths
 alacritty_path="$HOME/.config/alacritty"
@@ -486,11 +490,20 @@ yazi_theme=$(cat << EOF
   use = "kanagawa"
 EOF
 )
+
+#detect wsl
+if [[ -n "$WSL_DISTRO_NAME" ]]; then
+  echo
+  echo "${spacer}Looks like youre on${bold} ${WSL_DISTRO_NAME} WSL${norm}"
+  echo "${spacer}But let's make shure.."
+
+fi
+
 echo
 echo "${spacer}Select setup for keyd (capslock <-> esc)"
-echo "${spacer}  w: if you run in WSL"
-echo "${spacer}  c: Chromebook (with SEARCH instead of CapsLock)"
-echo "${spacer}  l: For bare-metal linux"
+echo "${spacer}  ${bold}w:${norm} if you run in WSL"
+echo "${spacer}  ${bold}c:${norm} Chromebook (with SEARCH instead of CapsLock)"
+echo "${spacer}  ${bold}l:${norm} For bare-metal linux"
 echo
 read -p "${spacer}Enter your choice: " choice
 echo
@@ -503,6 +516,9 @@ case "$choice" in
     handle_keyd=0
     ;;
   c)
+    if [[ -n "$WSL_DISTRO_NAME" ]]; then
+      echo "${spacer}I think you're lying. But okay."
+    fi
     echo "[▓▓░░░] Chromebook it is (poor you)"
     keyd_config=$(cat << EOF
 [ids]
@@ -514,6 +530,9 @@ EOF
 )       
     ;;
   l)
+    if [[ -n "$WSL_DISTRO_NAME" ]]; then
+      echo "${spacer}I think you're lying. But okay."
+    fi
     echo "[▓▓░░░] Normal linux it is. (i've not tested it yet)"
     keyd_config=$(cat << EOF
 [ids]
@@ -575,12 +594,15 @@ echo "${spacer}  ⋅ yazi flavor (kanagawa)"
 
   echo "${spacer}  ⋅ font: GohuFont uni 14 Nerd Font Mono"
   echo
+  if [[ -f "$fonts_path/GohuFontuni14NerdFontMono-Regular.ttf" ]]; then
+    echo "${spacer}You seem to have my fav nerd-font already!"
+  else
     wget -P $fonts_path https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Gohu/uni-14/GohuFontuni14NerdFontMono-Regular.ttf
-
+  fi
 
 for ((i=0; i < $tw; i++)); do
   printf "─"
 done
 echo
 
-echo "[▓▓▓▓▓▓] The rest is up to you."
+echo "[▓▓▓▓▓] The rest is up to you."

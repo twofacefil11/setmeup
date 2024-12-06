@@ -135,8 +135,6 @@
   #media
   vlc
   spotify-player
-  # spotify-player
-  # spotify-tui
 
   ];
 

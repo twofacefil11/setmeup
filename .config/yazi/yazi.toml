@@ -1,0 +1,7 @@
+[manager]
+  ratio = [2,3,4]
+  show_hidden = true
+[opener]
+edit = [
+  {run = 'zellij run -- lvim "$@"', block = true}
+]
